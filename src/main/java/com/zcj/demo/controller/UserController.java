@@ -6,12 +6,14 @@ import com.zcj.demo.core.ResultCode;
 import com.zcj.demo.core.ResultGenerator;
 import com.zcj.demo.dao.UserMapper;
 import com.zcj.demo.model.User;
+import com.zcj.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.io.Serializable;
 
 /**
@@ -22,11 +24,11 @@ import java.io.Serializable;
 @RestController
 @RequestMapping(value = "pic")
 public class UserController {
-    @Autowired
-    UserMapper userMapper;
+    @Resource
+    UserService userService;
     @GetMapping("/test")
     public Result pic(){
-        User user = userMapper.selectUserByName("supadmin");
+        User user = userService.selectUserByName("supadmin");
         return ResultGenerator.genSuccessResult(user);
     }
     @PostMapping("/postTest")
