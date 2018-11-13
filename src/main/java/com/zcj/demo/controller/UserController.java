@@ -2,16 +2,12 @@ package com.zcj.demo.controller;
 
 import com.zcj.demo.core.EnumTest;
 import com.zcj.demo.core.Result;
-import com.zcj.demo.core.ResultCode;
 import com.zcj.demo.core.ResultGenerator;
-import com.zcj.demo.dao.UserMapper;
 import com.zcj.demo.model.User;
 import com.zcj.demo.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.io.Serializable;
 
 /**
  * @Auther: 10062376
@@ -27,6 +23,11 @@ public class UserController {
     public Result pic(){
         User user = userService.selectUserByName("supadmin");
         return ResultGenerator.genSuccessResult(user);
+    }
+    @GetMapping("/testMapData")
+    public String getMapData(){
+        String mapData = "";
+        return mapData;
     }
     @PostMapping("/postTest")
     public String Test(){
