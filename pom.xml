@@ -124,6 +124,11 @@
             <artifactId>druid</artifactId>
             <version>1.0.28</version>
         </dependency>
+        <dependency>
+            <groupId>org.crazycake</groupId>
+            <artifactId>shiro-redis</artifactId>
+            <version>3.1.0</version><!-- 升级到3.1.0,支持sentinel,cluster -->
+        </dependency>
     </dependencies>
 
     <build>
