@@ -10,4 +10,6 @@ import com.zcj.demo.model.User;
  */
 public interface UserService extends Service<User> {
     User selectUserByName(String name);
+
+    User findUserByUserName(String name);
 }
