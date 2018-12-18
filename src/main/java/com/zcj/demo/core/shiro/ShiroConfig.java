@@ -13,6 +13,7 @@ import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -162,8 +163,8 @@ public class ShiroConfig {
      * 注册全局异常处理
      * @return
      */
-//    @Bean(name = "exceptionHandler")
-//    public HandlerExceptionResolver handlerExceptionResolver() {
-//        return new MyExceptionHandler();
-//    }
+    @Bean(name = "exceptionHandler")
+    public HandlerExceptionResolver handlerExceptionResolver() {
+        return new MyExceptionHandler();
+    }
 }
