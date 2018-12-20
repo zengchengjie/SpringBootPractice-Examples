@@ -10,7 +10,6 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
 import org.crazycake.shiro.RedisSessionDAO;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -26,14 +25,14 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
 
-    @Value("${spring.redis.shiro.host}")
-    private String host;
-    @Value("${spring.redis.shiro.port}")
-    private int port;
-    @Value("${spring.redis.shiro.timeout}")
-    private int timeout;
-    @Value("${spring.redis.shiro.password}")
-    private String password;
+//    @Value("${spring.redis.host}")
+//    private String host;
+//    @Value("${spring.redis.port}")
+//    private int port;
+//    @Value("${spring.redis.timeout}")
+//    private int timeout;
+//    @Value("${spring.redis.password}")
+//    private String password;
 
     @Bean
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
@@ -111,11 +110,11 @@ public class ShiroConfig {
      */
     public RedisManager redisManager() {
         RedisManager redisManager = new RedisManager();
-        redisManager.setHost(host);
-        redisManager.setPort(port);
+//        redisManager.setHost(host);
+//        redisManager.setPort(port);
 //        redisManager.setExpire(1800);// 配置缓存过期时间
-        redisManager.setTimeout(timeout);
-        redisManager.setPassword(password);
+//        redisManager.setTimeout(timeout);
+//        redisManager.setPassword(password);
         return redisManager;
     }
 
