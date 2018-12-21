@@ -29,7 +29,7 @@ import java.sql.SQLException;
 @MapperScan(basePackages  = "com.huitu.mp.shiro.mapper", sqlSessionTemplateRef  = "shiroSqlSessionTemplate")
 public class ShiroDataSourceConfig {
 
-    @ConfigurationProperties(prefix = "spring.dataSource.druid.shiroDataSource")
+    @ConfigurationProperties(prefix = "spring.data-source.druid.shiro-data-source")
     @Bean(name = "shiroDataSource")
     public DataSource shiroDataSource() throws SQLException {
         return DruidDataSourceBuilder.create().build();
