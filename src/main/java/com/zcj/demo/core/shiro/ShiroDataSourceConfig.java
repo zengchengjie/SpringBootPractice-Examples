@@ -41,14 +41,14 @@ public class ShiroDataSourceConfig {
                                                  @Qualifier(value="globalConfigurationShiro")GlobalConfiguration globalConfiguration) throws Exception{
         MybatisSqlSessionFactoryBean bean = new MybatisSqlSessionFactoryBean();
         bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:shiroMapper/*.xml"));
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*.xml"));
         Interceptor[] interceptors = new Interceptor[]{paginationInterceptor};
         bean.setPlugins(interceptors);
         bean.setGlobalConfig(globalConfiguration);
         return bean.getObject();
     }
 
-    @ConfigurationProperties(prefix = "globalConfigShrio")
+    @ConfigurationProperties(prefix = "global-config-shrio")
     @Bean(name="globalConfigurationShiro")
     public GlobalConfiguration globalConfigurationShiro() {
         return new GlobalConfiguration();
