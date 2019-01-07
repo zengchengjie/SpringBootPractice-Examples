@@ -24,10 +24,11 @@
         <java.version>1.8</java.version>
         <mybatisplus-spring-boot-starter.version>1.0.5</mybatisplus-spring-boot-starter.version>
         <mybatisplus.version>2.1.8</mybatisplus.version>
-        <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
+        <spring-boot.version>2.0.2.RELEASE</spring-boot.version>
         <shiro.version>1.4.0</shiro.version>
         <fastjson.version>1.2.39</fastjson.version>
     </properties>
+
 
     <dependencies>
         <!--Spring Boot依赖-->
@@ -52,6 +53,7 @@
             <version>${spring-boot.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!--热部署依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -59,8 +61,8 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -69,9 +71,9 @@
         </dependency>
         <!--Mybatis依赖-->
         <!--<dependency>-->
-            <!--<groupId>org.mybatis.spring.boot</groupId>-->
-            <!--<artifactId>mybatis-spring-boot-starter</artifactId>-->
-            <!--<version>1.3.2</version>-->
+        <!--<groupId>org.mybatis.spring.boot</groupId>-->
+        <!--<artifactId>mybatis-spring-boot-starter</artifactId>-->
+        <!--<version>1.3.2</version>-->
         <!--</dependency>-->
         <dependency>
             <groupId>org.mybatis</groupId>
@@ -139,14 +141,14 @@
             <version>${shiro.version}</version>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>org.apache.shiro</groupId>-->
-            <!--<artifactId>shiro-core</artifactId>-->
-            <!--<version>1.4.0</version>-->
+        <!--<groupId>org.apache.shiro</groupId>-->
+        <!--<artifactId>shiro-core</artifactId>-->
+        <!--<version>1.4.0</version>-->
         <!--</dependency>-->
         <!--<dependency>-->
-            <!--<groupId>com.github.theborakompanioni</groupId>-->
-            <!--<artifactId>thymeleaf-extras-shiro</artifactId>-->
-            <!--<version>2.0.0</version>-->
+        <!--<groupId>com.github.theborakompanioni</groupId>-->
+        <!--<artifactId>thymeleaf-extras-shiro</artifactId>-->
+        <!--<version>2.0.0</version>-->
         <!--</dependency>-->
         <dependency>
             <groupId>org.crazycake</groupId>
@@ -171,6 +173,28 @@
     </dependencies>
 
     <build>
+        <!-- 如果不添加此节点mybatis的mapper.xml文件都会被漏掉。 -->
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.yml</include>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.yml</include>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
