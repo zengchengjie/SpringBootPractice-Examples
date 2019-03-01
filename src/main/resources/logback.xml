@@ -10,6 +10,25 @@
         </filter>
     </appender>
 
+    <appender name="KAFKA_USER" class="com.example.kafkademo.KafkaAppender">
+        <topic>snos_tslg_userlog</topic>
+        <zookeeperHost>xxx:9092</zookeeperHost>
+        <brokerList>xxx:9092</brokerList>
+        <!--<appender-ref ref="Console" />-->
+    </appender>
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d [%t] %-5p [%c] - %m%n</pattern>
+            <!--<pattern>%-5level %logger %C %M %d{MM/dd-HH:mm:ss.SSS} [%thread] - %m%n</pattern>-->
+        </encoder>
+    </appender>
+    <logger name="kafkaDevice" additivity="false">
+        <appender-ref ref="KAFKA_DEVICE"/>
+    </logger>
+
+    <logger name="kafkaUser" additivity="false">
+        <appender-ref ref="KAFKA_USER"/>
+    </logger>
     <!--<logger name="com.example.main" additivity="true">-->
         <!--<level value="DEBUG" />-->
         <!--<appender-ref ref="consoleAppender" />-->
