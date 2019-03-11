@@ -16,7 +16,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)//
     private Long id;
-    @Column(name = "user_name")
+    @Column(name = "username")
     private String userName;
     @Column(name = "password")
     private String password;
@@ -28,6 +28,10 @@ public class User {
     private UserStatesEnum state;
     @Column(name = "isdelete")
     private Integer isdelete;
+    @Column(name = "create_time")
+    private Integer createTime;
+    @Column(name = "update_time")
+    private Integer updateTime;
     @Transient
     List<Role> roles = new ArrayList<>();//一个用户对应多个角色
 
@@ -93,5 +97,21 @@ public class User {
 
     public void setIsdelete(Integer isdelete) {
         this.isdelete = isdelete;
+    }
+
+    public Integer getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Integer createTime) {
+        this.createTime = createTime;
+    }
+
+    public Integer getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Integer updateTime) {
+        this.updateTime = updateTime;
     }
 }

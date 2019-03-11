@@ -48,7 +48,7 @@ public class ShiroDataSourceConfig {
         return bean.getObject();
     }
 
-    @ConfigurationProperties(prefix = "global-config-shrio")
+    @ConfigurationProperties(prefix = "global-configure-shrio")
     @Bean(name="globalConfigurationShiro")
     public GlobalConfiguration globalConfigurationShiro() {
         return new GlobalConfiguration();

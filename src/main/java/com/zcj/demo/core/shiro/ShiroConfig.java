@@ -11,7 +11,6 @@ import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
 import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.util.LinkedHashMap;
@@ -22,7 +21,7 @@ import java.util.Map;
  * @Date: 2018/11/13 10:55
  * @Description:
  */
-@Configuration
+//@Configuration
 public class ShiroConfig {
 
 //    @Value("${spring.redis.host}")
@@ -74,6 +73,12 @@ public class ShiroConfig {
         return hashedCredentialsMatcher;
     }
 
+    /**
+     * 自定义身份认证 realm;
+     *
+     * 必须写这个类，并加上 @Bean 注解，目的是注入 CustomRealm，
+     * 否则会影响 CustomRealm类 中其他类的依赖注入
+     */
     @Bean
     public MyShiroRealm myShiroRealm() {
         MyShiroRealm myShiroRealm = new MyShiroRealm();
@@ -82,6 +87,7 @@ public class ShiroConfig {
     }
 
 
+    //注入securityManager
     @Bean
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();

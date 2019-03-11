@@ -9,7 +9,10 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 @SpringBootApplication
 @EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class,JpaRepositoriesAutoConfiguration.class})
 public class DemoApplication {
-
+    /**
+     * redis 定时任务 solr/ElacsticSearch mybatis  shiro
+     * @param args
+     */
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
     }

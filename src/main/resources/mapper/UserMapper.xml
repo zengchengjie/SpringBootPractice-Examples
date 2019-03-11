@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zcj.demo.dao.UserMapper" >
+    <resultMap id="UserMap" type="com.zcj.demo.model.User">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="password" jdbcType="INTEGER" property="password"/>
+        <!--<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>-->
+        <!--<result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>-->
+        <result column="isdelete" jdbcType="INTEGER" property="isdelete"/>
+        <!--<collection property="roles" ofType="com.zcj.demo.model.Role"-->
+                    <!--javaType="ArrayList" column="id" select="listRolesByUserId" fetchType="eager" />-->
+    </resultMap>
 
     <select id="selectUserByName"  resultType="com.zcj.demo.model.User">
         SELECT * FROM user WHERE name = #{name}
