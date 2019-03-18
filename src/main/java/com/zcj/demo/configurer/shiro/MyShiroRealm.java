@@ -1,4 +1,4 @@
-package com.zcj.demo.core.shiro;
+package com.zcj.demo.configurer.shiro;
 
 import com.zcj.demo.model.Permission;
 import com.zcj.demo.model.Role;

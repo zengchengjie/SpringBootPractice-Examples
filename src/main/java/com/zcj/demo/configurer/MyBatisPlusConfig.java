@@ -1,4 +1,4 @@
-package com.zcj.demo.core;
+package com.zcj.demo.configurer;
 
 import com.baomidou.mybatisplus.plugins.PaginationInterceptor;
 import org.springframework.context.annotation.Bean;

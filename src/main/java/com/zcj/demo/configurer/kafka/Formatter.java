@@ -1,4 +1,4 @@
-package com.zcj.demo.core.kafka;
+package com.zcj.demo.configurer.kafka;
 
 /**
  * @Auther: 10062376

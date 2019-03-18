@@ -117,7 +117,10 @@ public class WebConfig extends WebMvcConfigurationSupport {
         });
     }
 
-    //解决跨域问题
+    /**
+     *解决跨域问题
+     * @param registry
+     */
     @Override
     protected void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**");    }

@@ -1,4 +1,4 @@
-package com.zcj.demo.core.shiro;
+package com.zcj.demo.configurer.shiro;
 
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;

@@ -1,4 +1,4 @@
-package com.zcj.demo.core.shiro;
+package com.zcj.demo.configurer.shiro;
 
 
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
