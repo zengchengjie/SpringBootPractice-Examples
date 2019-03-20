@@ -4,12 +4,9 @@ package com.zcj.demo.configurer;
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
@@ -31,9 +28,9 @@ import java.util.Set;
 /**
  * Redis配置
  */
-@Configuration
-@EnableAutoConfiguration
-@EnableCaching
+//@Configuration
+//@EnableAutoConfiguration
+//@EnableCaching
 public class RedisConfigurer extends CachingConfigurerSupport {
 
     @Value("${spring.redis.host}")
@@ -51,16 +48,16 @@ public class RedisConfigurer extends CachingConfigurerSupport {
     @Value("${spring.redis.password}")
     private String password;
 
-    @Value("${spring.redis.pool.max-idle}")
+    @Value("${spring.redis.pool.jedis.max-idle}")
     private int maxIdle;
 
-    @Value("${spring.redis.pool.max-active}")
+    @Value("${spring.redis.pool.jedis.max-active}")
     private int maxActive;
 
-    @Value("${spring.redis.pool.min-idle}")
+    @Value("${spring.redis.pool.jedis.min-idle}")
     private int minIdle;
 
-    @Value("${spring.redis.pool.max-wait}")
+    @Value("${spring.redis.pool.jedis.max-wait}")
     private long maxWaitMillis;
 
     @Value("${spring.redis.sentinel.nodes}")
