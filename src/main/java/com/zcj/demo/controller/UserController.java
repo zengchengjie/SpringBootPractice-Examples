@@ -24,7 +24,7 @@ public class UserController {
     @GetMapping("/test")
     public Result pic(){
         User user = userService.selectUserByName("supadmin");
-        return ResultGenerator.genSuccessResult(user);
+        return ResultGenerator.genSuccessResult("success");
     }
     @GetMapping("/testMapData")
     public String getMapData(){

@@ -1,5 +1,6 @@
 package com.zcj.demo.configurer;
 
+import com.baomidou.mybatisplus.plugins.PaginationInterceptor;
 import com.github.pagehelper.PageHelper;
 import com.zcj.demo.core.ProjectConstant;
 import org.apache.ibatis.plugin.Interceptor;
@@ -20,32 +21,33 @@ import java.util.Properties;
 @Configuration
 public class MyBatisPlusConfig {
 
-//    @Bean
-//    public PaginationInterceptor paginationInterceptor() {
-//        return new PaginationInterceptor();
-//    }
-@Bean
-public SqlSessionFactory sqlSessionFactoryBean(DataSource dataSource) throws Exception {
-    SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
-    factory.setDataSource(dataSource);
-    factory.setTypeAliasesPackage(ProjectConstant.MODEL_PACKAGE);
+    @Bean
+    public PaginationInterceptor paginationInterceptor() {
+        return new PaginationInterceptor();
+    }
 
-    //配置分页插件，详情请查阅官方文档
-    PageHelper pageHelper = new PageHelper();
-    Properties properties = new Properties();
-    properties.setProperty("pageSizeZero", "true");//分页尺寸为0时查询所有纪录不再执行分页
-    properties.setProperty("reasonable", "true");//页码<=0 查询第一页，页码>=总页数查询最后一页
-    properties.setProperty("supportMethodsArguments", "true");//支持通过 Mapper 接口参数来传递分页参数
-    pageHelper.setProperties(properties);
+    @Bean
+    public SqlSessionFactory sqlSessionFactoryBean(DataSource dataSource) throws Exception {
+        SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
+        factory.setDataSource(dataSource);
+        factory.setTypeAliasesPackage(ProjectConstant.MODEL_PACKAGE);
 
-    //添加插件
-    factory.setPlugins(new Interceptor[]{pageHelper});
+        //配置分页插件，详情请查阅官方文档
+        PageHelper pageHelper = new PageHelper();
+        Properties properties = new Properties();
+        properties.setProperty("pageSizeZero", "true");//分页尺寸为0时查询所有纪录不再执行分页
+        properties.setProperty("reasonable", "true");//页码<=0 查询第一页，页码>=总页数查询最后一页
+        properties.setProperty("supportMethodsArguments", "true");//支持通过 Mapper 接口参数来传递分页参数
+        pageHelper.setProperties(properties);
 
-    //添加XML目录
-    ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-    factory.setMapperLocations(resolver.getResources("classpath:mapper/*.xml"));
-    return factory.getObject();
-}
+        //添加插件
+        factory.setPlugins(new Interceptor[]{pageHelper});
+
+        //添加XML目录
+        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        factory.setMapperLocations(resolver.getResources("classpath:mapper/*.xml"));
+        return factory.getObject();
+    }
 
     @Bean
     public MapperScannerConfigurer mapperScannerConfigurer() {
