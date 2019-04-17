@@ -21,23 +21,22 @@ import java.util.Map;
 /**
  * @Auther: 10062376
  * @Date: 2018/11/13 10:55
- * @Description:
+ * @Description: shiro配置类
  */
 @Configuration
 public class ShiroConfig {
-
-    @Value("${spring.redis.host}")
+    @Value("${spring.redis.shiro.host}")
     private String host;
-    @Value("${spring.redis.port}")
+    @Value("${spring.redis.shiro.port}")
     private int port;
-    @Value("${spring.redis.jedis.timeout}")
+    @Value("${spring.redis.shiro.timeout}")
     private int timeout;
-    @Value("${spring.redis.password}")
+    @Value("${spring.redis.shiro.password}")
     private String password;
 
     @Bean
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
-//        System.out.println("ShiroConfiguration.shirFilter()");
+        System.out.println("ShiroConfiguration.shirFilter()");
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
@@ -75,12 +74,6 @@ public class ShiroConfig {
         return hashedCredentialsMatcher;
     }
 
-    /**
-     * 自定义身份认证 realm;
-     *
-     * 必须写这个类，并加上 @Bean 注解，目的是注入 CustomRealm，
-     * 否则会影响 CustomRealm类 中其他类的依赖注入
-     */
     @Bean
     public MyShiroRealm myShiroRealm() {
         MyShiroRealm myShiroRealm = new MyShiroRealm();
@@ -89,7 +82,6 @@ public class ShiroConfig {
     }
 
 
-    //注入securityManager
     @Bean
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
@@ -118,11 +110,12 @@ public class ShiroConfig {
      */
     public RedisManager redisManager() {
         RedisManager redisManager = new RedisManager();
-//        redisManager.setHost(host);
-//        redisManager.setPort(port);
+        redisManager.setHost(host);
+        redisManager.setPort(port);
 //        redisManager.setExpire(1800);// 配置缓存过期时间
-//        redisManager.setTimeout(timeout);
-//        redisManager.setPassword(password);
+        redisManager.setTimeout(1800);// 配置缓存过期时间
+        redisManager.setTimeout(timeout);
+        redisManager.setPassword(password);
         return redisManager;
     }
 

@@ -12,7 +12,6 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
@@ -25,7 +24,7 @@ import java.sql.SQLException;
  * @Date: 2018/12/19 09:31
  * @Description:
  */
-@Configuration
+//@Configuration
 @MapperScan(basePackages  = "com.huitu.mp.shiro.mapper", sqlSessionTemplateRef  = "shiroSqlSessionTemplate")
 public class ShiroDataSourceConfig {
 
