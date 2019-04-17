@@ -4,9 +4,12 @@ package com.zcj.demo.configurer;
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
@@ -28,9 +31,9 @@ import java.util.Set;
 /**
  * Redis配置
  */
-//@Configuration
-//@EnableAutoConfiguration
-//@EnableCaching
+@Configuration
+@EnableAutoConfiguration
+@EnableCaching
 public class RedisConfigurer extends CachingConfigurerSupport {
 
     @Value("${spring.redis.host}")
@@ -39,7 +42,7 @@ public class RedisConfigurer extends CachingConfigurerSupport {
     @Value("${spring.redis.port}")
     private int port;
 
-    @Value("${spring.redis.timeout}")
+    @Value("${spring.redis.jedis.timeout}")
      private int timeout;
 
     @Value("${spring.redis.database}")

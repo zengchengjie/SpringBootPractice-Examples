@@ -5,9 +5,9 @@ import com.zcj.demo.core.Result;
 import com.zcj.demo.core.ResultGenerator;
 import com.zcj.demo.model.User;
 import com.zcj.demo.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,16 +19,16 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "pic")
 public class UserController {
-    @Resource
+    @Autowired
     UserService userService;
     @GetMapping("/test")
     public Result pic(){
         User user = userService.selectUserByName("supadmin");
-        return ResultGenerator.genSuccessResult("success");
+        return ResultGenerator.genSuccessResult(user.getName());
     }
     @GetMapping("/testMapData")
     public String getMapData(){
-        String mapData = "";
+        String mapData = "test";
         return mapData;
     }
     @PostMapping("/postTest")
