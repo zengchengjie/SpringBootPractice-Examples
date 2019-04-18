@@ -1,12 +1,30 @@
 package com.zcj.demo.configurer.shiro;
 
 
+//import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+//import org.apache.shiro.mgt.SecurityManager;
+//import org.apache.shiro.session.mgt.SessionManager;
+//import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
+//import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+//import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+//import org.crazycake.shiro.RedisCacheManager;
+//import org.crazycake.shiro.RedisManager;
+//import org.crazycake.shiro.RedisSessionDAO;
+//import org.springframework.beans.factory.annotation.Value;
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.web.servlet.HandlerExceptionResolver;
+//
+//import java.util.LinkedHashMap;
+//import java.util.Map;
+
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
 import org.crazycake.shiro.RedisSessionDAO;
@@ -17,14 +35,14 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 /**
  * @Auther: 10062376
  * @Date: 2018/11/13 10:55
- * @Description: shiro配置类
+ * @Description:
  */
 @Configuration
 public class ShiroConfig {
+
     @Value("${spring.redis.shiro.host}")
     private String host;
     @Value("${spring.redis.shiro.port}")
@@ -36,7 +54,7 @@ public class ShiroConfig {
 
     @Bean
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
-        System.out.println("ShiroConfiguration.shirFilter()");
+//        System.out.println("ShiroConfiguration.shirFilter()");
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
@@ -74,6 +92,12 @@ public class ShiroConfig {
         return hashedCredentialsMatcher;
     }
 
+    /**
+     * 自定义身份认证 realm;
+     *
+     * 必须写这个类，并加上 @Bean 注解，目的是注入 CustomRealm，
+     * 否则会影响 CustomRealm类 中其他类的依赖注入
+     */
     @Bean
     public MyShiroRealm myShiroRealm() {
         MyShiroRealm myShiroRealm = new MyShiroRealm();
@@ -82,6 +106,7 @@ public class ShiroConfig {
     }
 
 
+    //注入securityManager
     @Bean
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
@@ -89,16 +114,22 @@ public class ShiroConfig {
         // 自定义session管理 使用redis
         securityManager.setSessionManager(sessionManager());
         // 自定义缓存实现 使用redis
-        securityManager.setCacheManager(cacheManager());
+        securityManager.setCacheManager(cacheManagers());
         return securityManager;
     }
 
     //自定义sessionManager
     @Bean
     public SessionManager sessionManager() {
-        MySessionManager mySessionManager = new MySessionManager();
-        mySessionManager.setSessionDAO(redisSessionDAO());
-        return mySessionManager;
+        MySessionManager sessionManager = new MySessionManager();
+        sessionManager.setSessionIdCookieEnabled(true);
+        SimpleCookie cookie = new SimpleCookie("WEBJSESSIONID");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(60 * 60 * 1000);
+        sessionManager.setSessionIdCookie(cookie);
+
+        sessionManager.setSessionDAO(redisSessionDAO());
+        return sessionManager;
     }
 
     /**
@@ -113,7 +144,6 @@ public class ShiroConfig {
         redisManager.setHost(host);
         redisManager.setPort(port);
 //        redisManager.setExpire(1800);// 配置缓存过期时间
-        redisManager.setTimeout(1800);// 配置缓存过期时间
         redisManager.setTimeout(timeout);
         redisManager.setPassword(password);
         return redisManager;
@@ -124,10 +154,18 @@ public class ShiroConfig {
      * <p>
      * 使用的是shiro-redis开源插件
      *
+     *
+     * 此处方法命名为cacheManager 时，报如下错误：
+     * Caused by: java.lang.IllegalStateException: @Bean method ShiroConfig.cacheManager called as bean reference for type
+     * [org.crazycake.shiro.RedisCacheManager] but overridden by non-compatible bean instance of type [org.springframework.data.redis.cache.RedisCacheManager].
+     * Overriding bean of same name declared in: class path resource [org/springframework/boot/autoconfigure/cache/RedisCacheConfiguration.class]
+     *
+     * 修改方法名为cacheManagers之后可以解决:原因为和redisConfigurer中的cacheManager方法冲突
+     *
      * @return
      */
     @Bean
-    public RedisCacheManager cacheManager() {
+    public RedisCacheManager cacheManagers() {
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         redisCacheManager.setRedisManager(redisManager());
         return redisCacheManager;

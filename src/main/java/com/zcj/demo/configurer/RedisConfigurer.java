@@ -20,13 +20,8 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.jedis.JedisSentinelPool;
 
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Redis配置
@@ -63,11 +58,11 @@ public class RedisConfigurer extends CachingConfigurerSupport {
     @Value("${spring.redis.pool.jedis.max-wait}")
     private long maxWaitMillis;
 
-    @Value("${spring.redis.sentinel.nodes}")
-    private String redisNodes;
+//    @Value("${spring.redis.sentinel.nodes}")
+//    private String redisNodes;
 
-    @Value("${spring.redis.sentinel.master}")
-    private String master;
+//    @Value("${spring.redis.sentinel.master}")
+//    private String master;
 
     @Bean
     public JedisPoolConfig jedisPoolConfig(){
@@ -81,15 +76,15 @@ public class RedisConfigurer extends CachingConfigurerSupport {
         return jedisPoolConfig;
     }
 
-    @Bean
-    public JedisSentinelPool jedisSentinelPool(){
-        String[] arrNodes = redisNodes.split(",");
-        List<String> listNodes = Arrays.asList(arrNodes);
-        Set sentinels = new HashSet(listNodes);
-
-        JedisSentinelPool jedisSentinelPool = new JedisSentinelPool(master,sentinels,jedisPoolConfig(),password);
-        return  jedisSentinelPool;
-    }
+//    @Bean
+//    public JedisSentinelPool jedisSentinelPool(){
+//        String[] arrNodes = redisNodes.split(",");
+//        List<String> listNodes = Arrays.asList(arrNodes);
+//        Set sentinels = new HashSet(listNodes);
+//
+//        JedisSentinelPool jedisSentinelPool = new JedisSentinelPool(master,sentinels,jedisPoolConfig(),password);
+//        return  jedisSentinelPool;
+//    }
 
 //    @Bean(name="redisConnectionFactory")
 //    JedisConnectionFactory redisConnectionFactory(){
