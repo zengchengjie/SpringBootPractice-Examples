@@ -4,9 +4,12 @@ package com.zcj.demo.configurer;
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
@@ -17,20 +20,15 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.jedis.JedisSentinelPool;
 
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Redis配置
  */
-//@Configuration
-//@EnableAutoConfiguration
-//@EnableCaching
+@Configuration
+@EnableAutoConfiguration
+@EnableCaching
 public class RedisConfigurer extends CachingConfigurerSupport {
 
     @Value("${spring.redis.host}")
@@ -39,7 +37,7 @@ public class RedisConfigurer extends CachingConfigurerSupport {
     @Value("${spring.redis.port}")
     private int port;
 
-    @Value("${spring.redis.timeout}")
+    @Value("${spring.redis.jedis.timeout}")
      private int timeout;
 
     @Value("${spring.redis.database}")
@@ -60,11 +58,11 @@ public class RedisConfigurer extends CachingConfigurerSupport {
     @Value("${spring.redis.pool.jedis.max-wait}")
     private long maxWaitMillis;
 
-    @Value("${spring.redis.sentinel.nodes}")
-    private String redisNodes;
+//    @Value("${spring.redis.sentinel.nodes}")
+//    private String redisNodes;
 
-    @Value("${spring.redis.sentinel.master}")
-    private String master;
+//    @Value("${spring.redis.sentinel.master}")
+//    private String master;
 
     @Bean
     public JedisPoolConfig jedisPoolConfig(){
@@ -78,15 +76,15 @@ public class RedisConfigurer extends CachingConfigurerSupport {
         return jedisPoolConfig;
     }
 
-    @Bean
-    public JedisSentinelPool jedisSentinelPool(){
-        String[] arrNodes = redisNodes.split(",");
-        List<String> listNodes = Arrays.asList(arrNodes);
-        Set sentinels = new HashSet(listNodes);
-
-        JedisSentinelPool jedisSentinelPool = new JedisSentinelPool(master,sentinels,jedisPoolConfig(),password);
-        return  jedisSentinelPool;
-    }
+//    @Bean
+//    public JedisSentinelPool jedisSentinelPool(){
+//        String[] arrNodes = redisNodes.split(",");
+//        List<String> listNodes = Arrays.asList(arrNodes);
+//        Set sentinels = new HashSet(listNodes);
+//
+//        JedisSentinelPool jedisSentinelPool = new JedisSentinelPool(master,sentinels,jedisPoolConfig(),password);
+//        return  jedisSentinelPool;
+//    }
 
 //    @Bean(name="redisConnectionFactory")
 //    JedisConnectionFactory redisConnectionFactory(){
