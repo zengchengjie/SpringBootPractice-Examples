@@ -30,7 +30,6 @@ import org.crazycake.shiro.RedisManager;
 import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.util.LinkedHashMap;
@@ -40,7 +39,7 @@ import java.util.Map;
  * @Date: 2018/11/13 10:55
  * @Description:
  */
-@Configuration
+//@Configuration
 public class ShiroConfig {
 
     @Value("${spring.redis.shiro.host}")
@@ -65,10 +64,10 @@ public class ShiroConfig {
         // 配置不会被拦截的链接 顺序判断
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/ajaxLogin", "anon");
-        filterChainDefinitionMap.put("/login", "anon");
+        filterChainDefinitionMap.put("/pic/login", "anon");
         filterChainDefinitionMap.put("/**", "authc");
         //配置shiro默认登录界面地址，前后端分离中登录界面跳转应由前端路由控制，后台仅返回json数据
-        shiroFilterFactoryBean.setLoginUrl("/unauth");
+        shiroFilterFactoryBean.setLoginUrl("/pic/unauth");
         // 登录成功后要跳转的链接
 //        shiroFilterFactoryBean.setSuccessUrl("/index");
         //未授权界面;
@@ -91,6 +90,11 @@ public class ShiroConfig {
         hashedCredentialsMatcher.setHashIterations(2);//散列的次数，比如散列两次，相当于 md5(md5(""));
         return hashedCredentialsMatcher;
     }
+    //配置自定义的密码比较器
+//    @Bean(name="credentialsMatcher")
+//    public CredentialsMatcher credentialsMatcher() {
+//        return new CredentialsMatcher();
+//    }
 
     /**
      * 自定义身份认证 realm;

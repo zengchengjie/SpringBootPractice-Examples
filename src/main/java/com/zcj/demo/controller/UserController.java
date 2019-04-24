@@ -13,6 +13,7 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -50,6 +51,41 @@ public class UserController {
     @PostMapping("/login")
     public Result login(@RequestParam String username,
                         @RequestParam String password) {
+        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+            return ResultGenerator.genFailResult("登录失败，用户或密码为空");
+        }
+        Subject sub = SecurityUtils.getSubject();
+
+        //如果已经登录的话
+        if (sub.isAuthenticated()) {
+            User loginUser= (User)sub.getPrincipals().getPrimaryPrincipal();
+            //检查是否当前用户
+            if (!loginUser.getUserName().equals(username)) {
+                try {
+                    //先登出之前的用户
+                    sub.logout();
+                    //在登录新的用户
+                    UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+                    sub.login(token);
+                } catch (Exception ex) {
+                    return ResultGenerator.genFailResult("登录失败，请检查用户或密码是否输错");
+                }
+            }
+        }
+        //未登录
+        else {
+            UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+            try {
+                //进行验证，这里可以捕获异常，然后返回对应信息
+                sub.login(token);
+            } catch (Exception ex) {
+                return ResultGenerator.genFailResult("登录失败，请检查用户或密码是否输错");
+            }
+//            logger.info("User [" + sub.getPrincipal() + "] logged in successfully.");
+        }
+
+
+
         JSONObject jsonObject = new JSONObject();
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);

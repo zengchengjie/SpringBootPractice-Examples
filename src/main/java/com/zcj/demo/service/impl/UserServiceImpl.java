@@ -24,9 +24,4 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
     public User selectUserByName(String name) {
         return userMapper.selectUserByName(name);
     }
-
-    @Override
-    public User findUserByUserName(String name) {
-        return null;
-    }
 }

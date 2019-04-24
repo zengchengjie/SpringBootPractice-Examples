@@ -24,6 +24,8 @@ public class User {
     private String name;
     @Column(name = "age")
     private Integer age;
+    @Column(name = "salt")
+    private String salt;
     @Column(name = "state")
     private UserStatesEnum state;
     @Column(name = "isdelete")
@@ -83,6 +85,14 @@ public class User {
         this.roles = roles;
     }
 
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
     public UserStatesEnum getState() {
         return state;
     }
@@ -114,4 +124,12 @@ public class User {
     public void setUpdateTime(Integer updateTime) {
         this.updateTime = updateTime;
     }
+    /**
+     * 密码盐.
+     * @return
+     */
+    public String getCredentialsSalt(){
+        return this.userName+this.salt;
+    }
+    //重新对盐重新进行了定义，用户名+salt，这样就更加不容易被破解
 }
