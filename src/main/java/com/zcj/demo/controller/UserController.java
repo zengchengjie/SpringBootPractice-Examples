@@ -17,6 +17,7 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +43,8 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    //开启事务支持
+    @Transactional
     @GetMapping("/test")
     public Result pic() {
         User user = userService.selectUserByName("supadmin");
