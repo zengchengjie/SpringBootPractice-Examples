@@ -6,7 +6,7 @@ package com.zcj.demo.constant.enums;
  * @Description:
  */
 public enum UserStatesEnum {
-    NFMAL(0,"正常","normal"),
+    NORMAL(0,"正常","normal"),
     FREEZE(1,"冻结","freeze");
     private Integer code;
     private String msgEn;

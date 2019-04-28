@@ -26,7 +26,9 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
     }
 
     @Override
-    public User findUserByUserName(String name) {
-        return null;
+    public User updateUser(User user) {
+        update(user);
+        return user;
     }
+
 }
