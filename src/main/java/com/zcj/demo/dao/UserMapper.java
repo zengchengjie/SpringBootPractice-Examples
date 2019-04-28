@@ -17,4 +17,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserMapper extends Mapper<User> {
     User selectUserByName(String name);
+
+    @Override
+    int updateByPrimaryKey(User record);
 }

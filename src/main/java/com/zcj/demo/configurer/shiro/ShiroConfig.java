@@ -32,6 +32,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
+import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 /**
@@ -64,15 +65,21 @@ public class ShiroConfig {
         // 配置不会被拦截的链接 顺序判断
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/ajaxLogin", "anon");
-        filterChainDefinitionMap.put("/pic/login", "anon");
+        filterChainDefinitionMap.put("/user/login", "anon");
+        filterChainDefinitionMap.put("/user/register", "anon");
         filterChainDefinitionMap.put("/**", "authc");
         //配置shiro默认登录界面地址，前后端分离中登录界面跳转应由前端路由控制，后台仅返回json数据
-        shiroFilterFactoryBean.setLoginUrl("/pic/unauth");
+        shiroFilterFactoryBean.setLoginUrl("/user/unauth");
         // 登录成功后要跳转的链接
 //        shiroFilterFactoryBean.setSuccessUrl("/index");
         //未授权界面;
 //        shiroFilterFactoryBean.setUnauthorizedUrl("/403");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+        //未授权界面;
+        Map<String,Filter> map= new LinkedHashMap<>();
+        map.put("authc",new AjaxPermissionsAuthorizationFilter());
+        shiroFilterFactoryBean.setFilters(map);
+
         return shiroFilterFactoryBean;
     }
 
@@ -122,7 +129,7 @@ public class ShiroConfig {
         return securityManager;
     }
 
-    //自定义sessionManager
+    //自定义sessionManager 配置过期时间
     @Bean
     public SessionManager sessionManager() {
         MySessionManager sessionManager = new MySessionManager();

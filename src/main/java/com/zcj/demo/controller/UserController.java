@@ -11,7 +11,11 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.crypto.RandomNumberGenerator;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -25,14 +29,24 @@ import java.util.Map;
  * @Description:
  */
 @RestController
-@RequestMapping(value = "pic")
+@RequestMapping(value = "user")
 public class UserController {
+    //随机数生成器
+    private static RandomNumberGenerator randomNumberGenerator = new SecureRandomNumberGenerator();
+
+    //指定散列算法为md5
+    private String algorithmName = "MD5";
+    //散列迭代次数
+    private final int hashIterations = 2;
+
     @Autowired
     UserService userService;
 
     @GetMapping("/test")
     public Result pic() {
         User user = userService.selectUserByName("supadmin");
+        user.setName("测试修改");
+        userService.updateUser(user);
         return ResultGenerator.genSuccessResult(user.getName());
     }
 
@@ -58,7 +72,7 @@ public class UserController {
 
         //如果已经登录的话
         if (sub.isAuthenticated()) {
-            User loginUser= (User)sub.getPrincipals().getPrimaryPrincipal();
+            User loginUser = (User) sub.getPrincipals().getPrimaryPrincipal();
             //检查是否当前用户
             if (!loginUser.getUserName().equals(username)) {
                 try {
@@ -85,7 +99,6 @@ public class UserController {
         }
 
 
-
         JSONObject jsonObject = new JSONObject();
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
@@ -106,10 +119,36 @@ public class UserController {
 
     }
 
+    @PostMapping("/logout")
+    public Result logout() {
+        //添加用户认证信息
+        Subject currentUser = SecurityUtils.getSubject();
+        if (currentUser != null) {
+            if (currentUser.isAuthenticated()) {
+                currentUser.logout();
+                return ResultGenerator.genSuccessResult();
+            }
+        }
+        return ResultGenerator.genSuccessResult("退出登录");
+    }
+
+    /**
+     * 用户注册时，系统为输入的密码进行加密，此处使用MD5算法，“密码+盐（用户名+随机数）”的方式生成散列值
+     *
+     * @param username
+     * @param password
+     * @return
+     */
     @PostMapping("/register")
     public Result register(@RequestParam String username,
                            @RequestParam String password) {
-        return ResultGenerator.genSuccessResult();
+        User user = new User();
+        user.setUserName(username);
+        user.setSalt(randomNumberGenerator.nextBytes().toHex());
+        String newPassword = new SimpleHash(algorithmName, password,
+                ByteSource.Util.bytes(user.getSalt()), hashIterations).toHex();
+        user.setPassword(newPassword);
+        return ResultGenerator.genSuccessResult("注册成功！");
     }
 
     /**
@@ -117,9 +156,9 @@ public class UserController {
      *
      * @return
      */
-    @RequestMapping(value = "/unauth")
+    @RequestMapping(value = "/unauth",method = RequestMethod.GET)
     @ResponseBody
-    public Object unauth(User userInfo) {
+    public Object unauth() {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("code", "1000000");
         map.put("msg", "未登录");
