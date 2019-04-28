@@ -103,6 +103,12 @@ public class ShiroConfig {
 //        return new CredentialsMatcher();
 //    }
 
+//    @Bean(name = "myCredentialsMatcher")
+//    public MyCredentialsMatcher myCredentialsMatcher(){
+//        MyCredentialsMatcher myCredentialsMatcher = new MyCredentialsMatcher(cacheManagers());
+//        myCredentialsMatcher.
+//        return myCredentialsMatcher;
+//    }
     /**
      * 自定义身份认证 realm;
      *
@@ -134,14 +140,26 @@ public class ShiroConfig {
     public SessionManager sessionManager() {
         MySessionManager sessionManager = new MySessionManager();
         sessionManager.setSessionIdCookieEnabled(true);
-        SimpleCookie cookie = new SimpleCookie("WEBJSESSIONID");
+        SimpleCookie cookie = new SimpleCookie();
+        cookie.setName("WEBJSESSIONID");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(60 * 60 * 1000);
         sessionManager.setSessionIdCookie(cookie);
-
         sessionManager.setSessionDAO(redisSessionDAO());
         return sessionManager;
     }
+//    @Bean(name = "sessionManager")
+//    public DefaultWebSessionManager sessionManager() {
+//        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+//
+//        sessionManager.setSessionIdCookieEnabled(true);
+//        SimpleCookie cookie = new SimpleCookie("WEBJSESSIONID");
+//        cookie.setHttpOnly(true);
+//        cookie.setMaxAge(60 * 60 * 1000);
+//        sessionManager.setSessionIdCookie(cookie);
+//        sessionManager.setSessionDAO(redisSessionDAO());
+//        return sessionManager;
+//    }
 
     /**
      * 配置shiro redisManager

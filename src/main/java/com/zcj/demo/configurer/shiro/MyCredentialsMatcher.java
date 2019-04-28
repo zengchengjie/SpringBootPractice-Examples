@@ -29,6 +29,13 @@ public class MyCredentialsMatcher extends SimpleCredentialsMatcher {
     public MyCredentialsMatcher(CacheManager cacheManager) {
         passwordRetryCache = cacheManager.getCache("passwordRetryCache");
     }
+
+    /**
+     * 验证账户密码，并限制登录失败次数
+     * @param token
+     * @param info
+     * @return
+     */
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
 
@@ -52,7 +59,7 @@ public class MyCredentialsMatcher extends SimpleCredentialsMatcher {
             }
             logger.info("锁定用户" + user.getUserName());
             //抛出用户锁定异常
-            throw new LockedAccountException();
+            throw new LockedAccountException("账户被冻结，请联系管理员。");
         }
         //判断用户账号和密码是否正确
         boolean matches = super.doCredentialsMatch(token, info);
