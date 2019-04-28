@@ -16,6 +16,6 @@
     </resultMap>
 
     <select id="selectUserByName"  resultType="com.zcj.demo.model.User">
-        SELECT * FROM user WHERE name = #{name}
+        SELECT * FROM user WHERE username = #{name}
     </select>
 </mapper>
