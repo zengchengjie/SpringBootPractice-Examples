@@ -6,6 +6,8 @@ import com.zcj.demo.core.Mapper;
 import com.zcj.demo.model.User;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 //import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -20,4 +22,6 @@ public interface UserMapper extends Mapper<User> {
 
     @Override
     int updateByPrimaryKey(User record);
+
+    List<String> selectTestPageHelperData();
 }

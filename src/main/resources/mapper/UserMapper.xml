@@ -18,4 +18,8 @@
     <select id="selectUserByName"  resultType="com.zcj.demo.model.User">
         SELECT * FROM user WHERE username = #{name}
     </select>
+
+    <select id="selectTestPageHelperData" resultType="java.lang.String">
+        SELECT name from test
+    </select>
 </mapper>

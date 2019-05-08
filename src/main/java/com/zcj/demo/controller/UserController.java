@@ -1,6 +1,8 @@
 package com.zcj.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zcj.demo.core.EnumTest;
 import com.zcj.demo.core.Result;
 import com.zcj.demo.core.ResultGenerator;
@@ -22,6 +24,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,6 +46,12 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @RequestMapping(value = "/index")
+    public String returnIndex(Map<String, Object> paramMap) {
+        paramMap.put("name", "张三");
+        return "index";
+    }
+
     //开启事务支持
     @Transactional
     @GetMapping("/test")
@@ -53,10 +62,14 @@ public class UserController {
         return ResultGenerator.genSuccessResult(user.getName());
     }
 
-    @GetMapping("/testMapData")
-    public String getMapData() {
-        String mapData = "test";
-        return mapData;
+    @GetMapping("/testPageHelper")
+    public Result getMapData() {
+        Integer page = 0;
+        Integer size = 10;
+        PageHelper.startPage(page, size);
+        List<String> list = userService.selectTestPageHelperData();
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
     }
 
     @PostMapping("/postTest")
@@ -159,7 +172,7 @@ public class UserController {
      *
      * @return
      */
-    @RequestMapping(value = "/unauth",method = RequestMethod.GET)
+    @RequestMapping(value = "/unauth", method = RequestMethod.GET)
     @ResponseBody
     public Object unauth() {
         Map<String, Object> map = new HashMap<String, Object>();
