@@ -1,4 +1,4 @@
-package com.zcj.demo.javapractice;
+package com.zcj.demo.testcollection.javapractice;
 
 /**
  * @Auther: 10062376

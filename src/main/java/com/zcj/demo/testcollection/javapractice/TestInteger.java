@@ -1,4 +1,4 @@
-package com.zcj.demo.javapractice;
+package com.zcj.demo.testcollection.javapractice;
 
 import com.zcj.demo.model.User;
 
