@@ -35,6 +35,7 @@ public class MyShiroConfig {
         filterChainDefinitionMap.put("/user/login", "anon");
         filterChainDefinitionMap.put("/user/register", "anon");
         filterChainDefinitionMap.put("/user/index", "anon");
+        filterChainDefinitionMap.put("/index/**", "anon");
 //        shiroFilterFactoryBean.setLoginUrl("/user/login");//此处填写页面的url 不适用与前后端分离的情况
 //        shiroFilterFactoryBean.setSuccessUrl("/user/login");
         //<!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
