@@ -16,10 +16,7 @@ import java.util.Map;
 
 
 /**
- * @Copyright (C), 1993-2018, BOE
- * @FileName: AjaxPermissionsAuthorizationFilter
- * @Author: whiliang
- * @Date:  下午12:29
+ * @Author: zengchengjie
  * @Description: 对没有登录的请求进行拦截, 全部返回json信息. 覆盖掉shiro原本的跳转login.jsp的拦截方式
  */
 public class AjaxPermissionsAuthorizationFilter extends FormAuthenticationFilter {

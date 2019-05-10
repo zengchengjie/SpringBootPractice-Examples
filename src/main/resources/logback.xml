@@ -10,15 +10,15 @@
         </filter>
     </appender>
 
-    <!--<appender name="KAFKA_DEVICE" class="com.boe.screenos.configurer.kafka.KafkaAppender">-->
-        <!--<topic>snos_tslg_devicelog</topic>-->
-        <!--<zookeeperHost>xxxx:9092</zookeeperHost>-->
-        <!--<brokerList>xxxx:9092</brokerList>-->
+    <!--<appender name="KAFKA_TEST1" class="XXX.KafkaAppender">-->
+        <!--<topic>XXX</topic>-->
+        <!--<zookeeperHost>xxxx:8888</zookeeperHost>-->
+        <!--<brokerList>xxxx:8888</brokerList>-->
     <!--</appender>-->
-    <!--<appender name="KAFKA_USER" class="com.boe.screenos.configurer.kafka.KafkaAppender">-->
-        <!--<topic>snos_tslg_userlog</topic>-->
-        <!--<zookeeperHost>xxxx:9092</zookeeperHost>-->
-        <!--<brokerList>xxxx:9092</brokerList>-->
+    <!--<appender name="KAFKA_TEST2" class="XXX.KafkaAppender">-->
+        <!--<topic>XXX</topic>-->
+        <!--<zookeeperHost>xxxx:8888</zookeeperHost>-->
+        <!--<brokerList>xxxx:8888</brokerList>-->
     <!--</appender>-->
     <!--<logger name="kafkaDevice" additivity="false">-->
         <!--<appender-ref ref="KAFKA_DEVICE"/>-->
