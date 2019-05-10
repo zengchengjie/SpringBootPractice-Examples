@@ -9,7 +9,7 @@ import javax.servlet.ServletResponse;
 import java.io.Serializable;
 
 /**
- * @Auther: 10062376
+ * @Auther: zengchengjie
  * @Date: 2018/11/13 10:55
  * @Description:   
  * 传统结构项目中，shiro从cookie中读取sessionId以此来维持会话，在前后端分离的项目中（也可在移动APP项目使用），

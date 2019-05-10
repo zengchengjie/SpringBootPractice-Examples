@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @Auther: 10062376
+ * @Auther: zengchengjie
  * @Date: 2019/3/11 11:56
  * @Description:API接口请求拦截器
  * 1、设备调用服务端请求，需要在Http Header中添加Mac字段,并将Mac转成大写 拼接 “DEMO”字符串，做MD5运算后，附带到HEADER中，命名为Token
