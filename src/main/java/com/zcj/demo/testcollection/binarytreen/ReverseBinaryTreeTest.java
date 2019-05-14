@@ -15,6 +15,24 @@ import java.util.Stack;
  * 题目描述：输入一个二叉树，输出其镜像(反转二叉树)。
  * */
 public class ReverseBinaryTreeTest {
+
+    public static void main(String[] args) {
+        ReverseBinaryTreeTest reverse = new ReverseBinaryTreeTest();
+        TreeNode root = null;
+        root = reverse.createTree(root);
+        System.out.println("原二叉树的层次遍历");
+        reverse.levelTraverse(root);
+        reverse.Mirror(root);
+        System.out.println("\n输出该二叉树的镜像:递归方式");
+        reverse.levelTraverse(root);
+        reverse.invertTree2(root);
+        System.out.println("\n输出该二叉树的镜像:非递归方式借助栈");
+        reverse.levelTraverse(root);
+        reverse.invertTree3(root);
+        System.out.println("\n输出该二叉树的镜像:非递归方式借助队列");
+        reverse.levelTraverse(root);
+    }
+
     Scanner scanner = new Scanner(System.in);
 
     // 建立二叉树
@@ -29,43 +47,6 @@ public class ReverseBinaryTreeTest {
         root.left = createTree(root.left);
         root.right = createTree(root.right);
         return root;
-    }
-
-    // 得到二叉树的镜像  —— 递归的方式
-    public void Mirror(TreeNode root) {
-        if (root == null) {
-            return;
-        }
-        if ((root.left == null) && (root.right == null)) {
-            return;
-        }
-        TreeNode temp = root.left;
-        root.left = root.right;
-        root.right = temp;
-        Mirror(root.left);
-        Mirror(root.right);
-    }
-
-    // 得到二叉树的镜像 —— 不使用递归
-    public void MirrorNotRecursive(TreeNode root) {
-        java.util.LinkedList<TreeNode> stack = new java.util.LinkedList<TreeNode>();
-        TreeNode temp = null;
-        if (root == null) {
-            return;
-        }
-        stack.add(root);
-        while (stack.size() != 0) {
-            TreeNode node = stack.removeFirst();
-            temp = node.left;
-            node.left = node.right;
-            node.right = temp;
-            if (node.right != null) {
-                stack.add(node.right);
-            }
-            if (node.left != null) {
-                stack.add(node.left);
-            }
-        }
     }
 
     // 层次遍历二叉树
@@ -87,46 +68,27 @@ public class ReverseBinaryTreeTest {
         }
     }
 
-    public static void main(String[] args) {
-        ReverseBinaryTreeTest reverse = new ReverseBinaryTreeTest();
-        TreeNode root = null;
-        root = reverse.createTree(root);
-        System.out.println("原二叉树的层次遍历");
-        reverse.levelTraverse(root);
-        reverse.Mirror(root);
-        System.out.println("\n输出该二叉树的镜像");
-        reverse.levelTraverse(root);
-        reverse.MirrorNotRecursive(root);
-        System.out.println("\n输出该二叉树的镜像（非递归方式）");
-        reverse.levelTraverse(root);
-        reverse.invertTree(root);
-        System.out.println("\n输出该二叉树的镜像:递归方式");
-        reverse.levelTraverse(root);
-        reverse.invertTree2(root);
-        System.out.println("\n输出该二叉树的镜像:非递归方式借助栈");
-        reverse.levelTraverse(root);
-        reverse.invertTree3(root);
-        System.out.println("\n输出该二叉树的镜像:非递归方式借助队列");
-        reverse.levelTraverse(root);
 
-    }
-
-    //递归方式
-    public TreeNode invertTree(TreeNode root) {
+    // 得到二叉树的镜像  —— 递归的方式
+    public void Mirror(TreeNode root) {
         if (root == null) {
-            return null;
+            return;
         }
-
+        if ((root.left == null) && (root.right == null)) {
+            return;
+        }
         //递归反转左右子树
         TreeNode temp = root.left;
-        root.left = invertTree(root.right);
-        root.right = invertTree(temp);
+        root.left = root.right;
+        root.right = temp;
+        Mirror(root.left);
+        Mirror(root.right);
 
-        return root;
-
+        // root.left = invertTree(root.right);
+        // root.right = invertTree(temp);
     }
 
-    //非递归层次遍历，借助栈
+    //得到二叉树的镜像：非递归层次遍历，借助栈
     public TreeNode invertTree2(TreeNode root) {
         if (root == null) {
             return null;
@@ -154,12 +116,10 @@ public class ReverseBinaryTreeTest {
             }
         }
 
-
         return root;
-
     }
 
-    //非递归层次遍历，借助于队列，操作与栈类似，只不过元素是先进先出。
+    //得到二叉树的镜像：非递归层次遍历，借助于队列，操作与栈类似，只不过元素是先进先出。
     public TreeNode invertTree3(TreeNode root) {
         if (root == null) {
             return null;
