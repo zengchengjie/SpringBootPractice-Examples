@@ -14,10 +14,10 @@ import java.util.Stack;
 /*
  * 题目描述：输入一个二叉树，输出其镜像(反转二叉树)。
  * */
-public class ReverseBinaryTreeTest {
+public class BinaryTreeTest {
 
     public static void main(String[] args) {
-        ReverseBinaryTreeTest reverse = new ReverseBinaryTreeTest();
+        BinaryTreeTest reverse = new BinaryTreeTest();
         TreeNode root = null;
         root = reverse.createTree(root);
         System.out.println("原二叉树的层次遍历");
@@ -31,6 +31,7 @@ public class ReverseBinaryTreeTest {
         reverse.invertTree3(root);
         System.out.println("\n输出该二叉树的镜像:非递归方式借助队列");
         reverse.levelTraverse(root);
+        System.out.println("二叉树最大深度："+reverse.treeDepth(root));
     }
 
     Scanner scanner = new Scanner(System.in);
@@ -67,7 +68,6 @@ public class ReverseBinaryTreeTest {
             }
         }
     }
-
 
     // 得到二叉树的镜像  —— 递归的方式
     public void Mirror(TreeNode root) {
@@ -144,6 +144,19 @@ public class ReverseBinaryTreeTest {
         }
 
         return root;
+    }
+
+    //递归求深度
+    public int treeDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        // 计算左子树的深度
+        int left = treeDepth(root.left);
+        // 计算右子树的深度
+        int right = treeDepth(root.right);
+        // 树root的深度=路径最长的子树深度 + 1
+        return left >= right ? (left + 1) : (right + 1);
     }
 }
 

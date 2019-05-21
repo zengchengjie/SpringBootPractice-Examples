@@ -18,11 +18,11 @@ import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,8 +42,7 @@ public class UserController {
     private String algorithmName = "MD5";
     //散列迭代次数
     private final int hashIterations = 2;
-
-    @Autowired
+    @Resource
     UserService userService;
 
     @RequestMapping(value = "/index")
