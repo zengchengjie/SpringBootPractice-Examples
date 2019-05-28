@@ -7,14 +7,15 @@ import java.util.Optional;
 /**
  * @Auther: 10062376
  * @Date: 2019/5/28 09:42
- * @Description:
+ * @Description: 对于代码中if else以及大量的switch case语句，我们可以用以下几种方式代替和优化
  */
 public class OptimizeIfElse {
     public static void main(String[] args) {
-        //使用枚举的方式对if else语句进行优化
+        //1、使用枚举的方式对if else语句进行优化
         int statusCode = Status.valueOf("NEW").statusCode;
         System.out.println("枚举的方式: " + statusCode);
         System.out.println(testOptional(new User()));
+        System.out.println(getMonthDays(7));
     }
 
     public enum Status {
@@ -27,7 +28,8 @@ public class OptimizeIfElse {
         }
     }
 
-    //optional可以让非空校验更加优雅，间接的减少if操作。
+    //2、optional可以让非空校验更加优雅，间接的减少if操作。
+    //补充：Java 9 为 Optional 类添加了三个方法：or()、ifPresentOrElse() 和 stream()
     public static String testOptional(User user) {
         //尝试访问 emptyOpt 变量的值会导致 NoSuchElementException
 //        Optional<User> userOptional0 = Optional.empty();
@@ -48,7 +50,7 @@ public class OptimizeIfElse {
         String str1 = userOptional.ofNullable(user.getUserName()).orElse("用户数据为空！");
         String str2 = userOptional.ofNullable(user.getUserName()).orElseGet(() -> "用户数据为空！");
         //optional还可以返回异常
-        userOptional.ofNullable(user.getUserName()).orElseThrow(()->new IllegalArgumentException());
+//        userOptional.ofNullable(user.getUserName()).orElseThrow(()->new IllegalArgumentException());
 
         return str2;
     }
@@ -58,5 +60,24 @@ public class OptimizeIfElse {
     public void action2(){
         System.out.println("do action2");
     }
+
+    //3、表驱动法是一种编程模式，它的本质是，从表里查询信息来代替逻辑语句(if,case)
+    static int monthDays[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    static int getMonthDays(int month){
+        return monthDays[--month];
+    }
+    public void mapTest(){
+        /*Map<?,Function<?> action> actionsMap = new HashMap<>();
+
+        // 初试配置对应动作
+        actionsMap.put(value1, (someParams) -> { doAction1(someParams)});
+        actionsMap.put(value2, (someParams) -> { doAction2(someParams)});
+        actionsMap.put(value3, (someParams) -> { doAction3(someParams)});
+
+        // 省略 null 判断
+        actionsMap.get(param).apply(someParams); */
+    }
+
+
 
 }
