@@ -5,6 +5,7 @@ import com.zcj.demo.dao.UserMapper;
 import com.zcj.demo.model.User;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.cache.Cache;
@@ -51,11 +52,11 @@ public class MyCredentialsMatcher extends SimpleCredentialsMatcher {
         if (retryCount.incrementAndGet() > 5) {
             //如果用户登陆失败次数大于5次 抛出锁定用户异常  并修改数据库字段
             User user = userMapper.selectUserByName(username);
-            if (user != null && "0".equals(user.getState())){
+            if (user != null && user.getState().getCode()==0){
                 //数据库字段 默认为 0  就是正常状态 所以 要改为1
                 //修改数据库的状态字段为锁定
                 user.setState(UserStatesEnum.FREEZE);
-                userMapper.updateByPrimaryKey(user);
+                userMapper.lockAccount(user.getId());
             }
             logger.info("锁定用户" + user.getUserName());
             //抛出用户锁定异常
@@ -66,6 +67,9 @@ public class MyCredentialsMatcher extends SimpleCredentialsMatcher {
         if (matches) {
             //如果正确,从缓存中将用户登录计数 清除
             passwordRetryCache.remove(username);
+        }else {
+            passwordRetryCache.put(username,retryCount);
+            throw new IncorrectCredentialsException("密码错误，剩余"+(5-retryCount.get())+"次重试机会");
         }
         return matches;
     }
@@ -80,7 +84,7 @@ public class MyCredentialsMatcher extends SimpleCredentialsMatcher {
         if (user != null){
             //修改数据库的状态字段为锁定
             user.setState(UserStatesEnum.NORMAL);
-            userMapper.updateByPrimaryKey(user);
+            userMapper.lockAccount(user.getId());
             passwordRetryCache.remove(username);
         }
     }

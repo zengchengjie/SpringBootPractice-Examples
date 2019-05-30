@@ -15,9 +15,7 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.util.ByteSource;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -83,8 +81,8 @@ public class UserController {
         if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
             return ResultGenerator.genFailResult("登录失败，用户或密码为空");
         }
+        JSONObject jsonObject = new JSONObject();
         Subject sub = SecurityUtils.getSubject();
-
         //如果已经登录的话
         if (sub.isAuthenticated()) {
             User loginUser = (User) sub.getPrincipals().getPrimaryPrincipal();
@@ -100,35 +98,28 @@ public class UserController {
                     return ResultGenerator.genFailResult("登录失败，请检查用户或密码是否输错");
                 }
             }
+            jsonObject.put("token", sub.getSession().getId());
+            jsonObject.put("msg", "登录成功");
         }
         //未登录
         else {
+
             UsernamePasswordToken token = new UsernamePasswordToken(username, password);
             try {
                 //进行验证，这里可以捕获异常，然后返回对应信息
                 sub.login(token);
-            } catch (Exception ex) {
-                return ResultGenerator.genFailResult("登录失败，请检查用户或密码是否输错");
+                jsonObject.put("token", sub.getSession().getId());
+                jsonObject.put("msg", "登录成功");
+            } catch (IncorrectCredentialsException e) {
+                return ResultGenerator.genFailResult(e.getMessage());
+            } catch (LockedAccountException e) {
+                return ResultGenerator.genFailResult(e.getMessage());
+            } catch (AuthenticationException e) {
+                return ResultGenerator.genFailResult("该用户不存在");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 //            logger.info("User [" + sub.getPrincipal() + "] logged in successfully.");
-        }
-
-
-        JSONObject jsonObject = new JSONObject();
-        Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-        try {
-            subject.login(token);
-            jsonObject.put("token", subject.getSession().getId());
-            jsonObject.put("msg", "登录成功");
-        } catch (IncorrectCredentialsException e) {
-            jsonObject.put("msg", "密码错误");
-        } catch (LockedAccountException e) {
-            jsonObject.put("msg", "登录失败，该用户已被冻结");
-        } catch (AuthenticationException e) {
-            jsonObject.put("msg", "该用户不存在");
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return ResultGenerator.genSuccessResult(jsonObject);
 
@@ -159,10 +150,10 @@ public class UserController {
                            @RequestParam String password) {
         User user = new User();
         user.setUserName(username);
-        user.setSalt(randomNumberGenerator.nextBytes().toHex());
-        String newPassword = new SimpleHash(algorithmName, password,
-                ByteSource.Util.bytes(user.getSalt()), hashIterations).toHex();
-        user.setPassword(newPassword);
+//        user.setSalt(randomNumberGenerator.nextBytes().toHex());
+//        String newPassword = new SimpleHash(algorithmName, password,
+//                ByteSource.Util.bytes(user.getSalt()), hashIterations).toHex();
+        user.setPassword(password);
         return ResultGenerator.genSuccessResult("注册成功！");
     }
 

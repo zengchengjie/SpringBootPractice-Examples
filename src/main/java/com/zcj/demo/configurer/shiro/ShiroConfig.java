@@ -18,7 +18,6 @@ package com.zcj.demo.configurer.shiro;
 //import java.util.LinkedHashMap;
 //import java.util.Map;
 
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -90,18 +89,18 @@ public class ShiroConfig {
      *
      * @return
      */
-    @Bean
-    public HashedCredentialsMatcher hashedCredentialsMatcher() {
-        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
-        hashedCredentialsMatcher.setHashAlgorithmName("md5");//散列算法:这里使用MD5算法;
-        hashedCredentialsMatcher.setHashIterations(2);//散列的次数，比如散列两次，相当于 md5(md5(""));
-        return hashedCredentialsMatcher;
-    }
-    //配置自定义的密码比较器
-//    @Bean(name="credentialsMatcher")
-//    public CredentialsMatcher credentialsMatcher() {
-//        return new CredentialsMatcher();
+//    @Bean
+//    public HashedCredentialsMatcher hashedCredentialsMatcher() {
+//        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
+//        hashedCredentialsMatcher.setHashAlgorithmName("md5");//散列算法:这里使用MD5算法;
+//        hashedCredentialsMatcher.setHashIterations(2);//散列的次数，比如散列两次，相当于 md5(md5(""));
+//        return hashedCredentialsMatcher;
 //    }
+    //配置自定义的密码比较器
+    @Bean(name="credentialsMatcher")
+    public MyCredentialsMatcher myCredentialsMatcher() {
+        return new MyCredentialsMatcher(cacheManagers());
+    }
 
 //    @Bean(name = "myCredentialsMatcher")
 //    public MyCredentialsMatcher myCredentialsMatcher(){
@@ -118,7 +117,7 @@ public class ShiroConfig {
     @Bean
     public MyShiroRealm myShiroRealm() {
         MyShiroRealm myShiroRealm = new MyShiroRealm();
-        myShiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+        myShiroRealm.setCredentialsMatcher(myCredentialsMatcher());
         return myShiroRealm;
     }
 
@@ -170,11 +169,11 @@ public class ShiroConfig {
      */
     public RedisManager redisManager() {
         RedisManager redisManager = new RedisManager();
-        redisManager.setHost(host);
-        redisManager.setPort(port);
-//        redisManager.setExpire(1800);// 配置缓存过期时间
-        redisManager.setTimeout(timeout);
-        redisManager.setPassword(password);
+//        redisManager.setHost(host);
+//        redisManager.setPort(port);
+////        redisManager.setExpire(1800);// 配置缓存过期时间
+//        redisManager.setTimeout(timeout);
+//        redisManager.setPassword(password);
         return redisManager;
     }
 
