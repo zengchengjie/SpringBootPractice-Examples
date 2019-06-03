@@ -1,4 +1,4 @@
-package com.zcj.demo.testcollection.javapractice;
+package com.zcj.demo.testcollection.javapractice.string;
 
 /**
  * @Auther: zengchengjie
@@ -7,6 +7,9 @@ package com.zcj.demo.testcollection.javapractice;
  */
 public class TestString {
     public static void main(String[] args) {
+        String str = "123456";
+        System.out.println("截取后："+str.substring(0,2));
+        System.out.println("原字符串："+str);
         testCharAt();
         testOr();
         testCharEquals();
