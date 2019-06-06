@@ -82,7 +82,7 @@ public class MyCredentialsMatcher extends SimpleCredentialsMatcher {
     public void unlockAccount(String username){
         User user = userMapper.selectUserByName(username);
         if (user != null){
-            //修改数据库的状态字段为锁定
+            //修改数据库的状态字段为正常
             user.setState(UserStatesEnum.NORMAL);
             userMapper.lockAccount(user.getId());
             passwordRetryCache.remove(username);

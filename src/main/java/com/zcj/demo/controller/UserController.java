@@ -8,6 +8,7 @@ import com.zcj.demo.core.Result;
 import com.zcj.demo.core.ResultGenerator;
 import com.zcj.demo.model.User;
 import com.zcj.demo.service.UserService;
+import com.zcj.demo.util.IpUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -21,6 +22,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -172,4 +174,9 @@ public class UserController {
 //        return ResultGenerator.genSuccessResult();
     }
 
+    @RequestMapping(value = "/getIp", method = RequestMethod.POST)
+    @ResponseBody
+    public String getIp(HttpServletRequest request) {
+        return IpUtil.getIpAddr(request);
+    }
 }
