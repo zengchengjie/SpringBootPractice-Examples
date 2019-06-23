@@ -20,8 +20,7 @@ import java.util.List;
 public interface UserMapper extends Mapper<User> {
     User selectUserByName(String name);
 
-    @Override
-    int updateByPrimaryKey(User record);
+    void lockAccount(Long uId);
 
     List<String> selectTestPageHelperData();
 }
