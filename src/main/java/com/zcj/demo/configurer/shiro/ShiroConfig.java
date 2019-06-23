@@ -1,24 +1,6 @@
 package com.zcj.demo.configurer.shiro;
 
-
-//import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-//import org.apache.shiro.mgt.SecurityManager;
-//import org.apache.shiro.session.mgt.SessionManager;
-//import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
-//import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-//import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-//import org.crazycake.shiro.RedisCacheManager;
-//import org.crazycake.shiro.RedisManager;
-//import org.crazycake.shiro.RedisSessionDAO;
-//import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.web.servlet.HandlerExceptionResolver;
-//
-//import java.util.LinkedHashMap;
-//import java.util.Map;
-
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import com.zcj.demo.constant.ConstantData;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -30,6 +12,7 @@ import org.crazycake.shiro.RedisManager;
 import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import javax.servlet.Filter;
@@ -40,7 +23,7 @@ import java.util.Map;
  * @Date: 2018/11/13 10:55
  * @Description:
  */
-//@Configuration
+@Configuration
 public class ShiroConfig {
 
     @Value("${spring.redis.shiro.host}")
@@ -90,25 +73,14 @@ public class ShiroConfig {
      *
      * @return
      */
-    @Bean
-    public HashedCredentialsMatcher hashedCredentialsMatcher() {
-        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
-        hashedCredentialsMatcher.setHashAlgorithmName("md5");//散列算法:这里使用MD5算法;
-        hashedCredentialsMatcher.setHashIterations(2);//散列的次数，比如散列两次，相当于 md5(md5(""));
-        return hashedCredentialsMatcher;
+    @Bean(name = "myCredentialsMatcher")
+    public MyCredentialsMatcher myCredentialsMatcher(){
+        MyCredentialsMatcher myCredentialsMatcher = new MyCredentialsMatcher(cacheManagers());
+        myCredentialsMatcher.setHashAlgorithmName(ConstantData.ALGORITHMNAME);//散列算法:这里使用MD5算法;
+        myCredentialsMatcher.setHashIterations(ConstantData.HASHITERATIONS);//散列的次数，比如散列两次，相当于 md5(md5(""));
+//        myCredentialsMatcher.setStoredCredentialsHexEncoded(true);
+        return myCredentialsMatcher;
     }
-    //配置自定义的密码比较器
-//    @Bean(name="credentialsMatcher")
-//    public CredentialsMatcher credentialsMatcher() {
-//        return new CredentialsMatcher();
-//    }
-
-//    @Bean(name = "myCredentialsMatcher")
-//    public MyCredentialsMatcher myCredentialsMatcher(){
-//        MyCredentialsMatcher myCredentialsMatcher = new MyCredentialsMatcher(cacheManagers());
-//        myCredentialsMatcher.
-//        return myCredentialsMatcher;
-//    }
     /**
      * 自定义身份认证 realm;
      *
@@ -118,7 +90,7 @@ public class ShiroConfig {
     @Bean
     public MyShiroRealm myShiroRealm() {
         MyShiroRealm myShiroRealm = new MyShiroRealm();
-        myShiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+        myShiroRealm.setCredentialsMatcher(myCredentialsMatcher());
         return myShiroRealm;
     }
 
@@ -139,27 +111,15 @@ public class ShiroConfig {
     @Bean
     public SessionManager sessionManager() {
         MySessionManager sessionManager = new MySessionManager();
-        sessionManager.setSessionIdCookieEnabled(true);
-        SimpleCookie cookie = new SimpleCookie();
-        cookie.setName("WEBJSESSIONID");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(60 * 60 * 1000);
-        sessionManager.setSessionIdCookie(cookie);
-        sessionManager.setSessionDAO(redisSessionDAO());
-        return sessionManager;
-    }
-//    @Bean(name = "sessionManager")
-//    public DefaultWebSessionManager sessionManager() {
-//        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-//
 //        sessionManager.setSessionIdCookieEnabled(true);
-//        SimpleCookie cookie = new SimpleCookie("WEBJSESSIONID");
+//        SimpleCookie cookie = new SimpleCookie();
+//        cookie.setName("WEBJSESSIONID");
 //        cookie.setHttpOnly(true);
 //        cookie.setMaxAge(60 * 60 * 1000);
 //        sessionManager.setSessionIdCookie(cookie);
-//        sessionManager.setSessionDAO(redisSessionDAO());
-//        return sessionManager;
-//    }
+        sessionManager.setSessionDAO(redisSessionDAO());
+        return sessionManager;
+    }
 
     /**
      * 配置shiro redisManager
@@ -172,7 +132,7 @@ public class ShiroConfig {
         RedisManager redisManager = new RedisManager();
         redisManager.setHost(host);
         redisManager.setPort(port);
-//        redisManager.setExpire(1800);// 配置缓存过期时间
+        redisManager.setTimeout(1800);// 配置缓存过期时间
         redisManager.setTimeout(timeout);
         redisManager.setPassword(password);
         return redisManager;
@@ -197,6 +157,7 @@ public class ShiroConfig {
     public RedisCacheManager cacheManagers() {
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         redisCacheManager.setRedisManager(redisManager());
+        redisCacheManager.setPrincipalIdFieldName("passwordRetryCache");
         return redisCacheManager;
     }
 

@@ -23,6 +23,11 @@ public class MyShiroRealm extends AuthorizingRealm {
     @Resource
     private UserService userService;
 
+    /**
+     * 获取登录成功后的角色权限等
+     * @param principals
+     * @return
+     */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 //        System.out.println("权限配置-->MyShiroRealm.doGetAuthorizationInfo()");
@@ -58,7 +63,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 userInfo, //用户名
                 userInfo.getPassword(), //密码
-                ByteSource.Util.bytes(userInfo.getCredentialsSalt()),//salt=username+salt
+                ByteSource.Util.bytes(userInfo.getSalt()),//salt=username+salt
                 getName()  //realm name
         );
         return authenticationInfo;

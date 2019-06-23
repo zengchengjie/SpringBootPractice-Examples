@@ -38,9 +38,9 @@ public class TestDependency {
         a.b.print();
     }
 
-    @Service
+//    @Service
     static class A {
-        @Autowired
+//        @Autowired
         public B b = new B();
 
         public void print() {
@@ -51,9 +51,9 @@ public class TestDependency {
 //        }
     }
 
-    @Service
+//    @Service
     static class B {
-        @Autowired
+//        @Autowired
         public A a = new A();
 
         public void print() {

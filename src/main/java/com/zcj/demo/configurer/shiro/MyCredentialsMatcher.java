@@ -6,6 +6,7 @@ import com.zcj.demo.model.User;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
@@ -20,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @Date: 2019/4/28 09:39
  * @Description:
  */
-public class MyCredentialsMatcher extends SimpleCredentialsMatcher {
+public class MyCredentialsMatcher extends HashedCredentialsMatcher {
     Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private UserMapper userMapper;

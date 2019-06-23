@@ -3,6 +3,7 @@ package com.zcj.demo.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zcj.demo.constant.ConstantData;
 import com.zcj.demo.core.EnumTest;
 import com.zcj.demo.core.Result;
 import com.zcj.demo.core.ResultGenerator;
@@ -16,6 +17,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.transaction.annotation.Transactional;
@@ -107,7 +109,9 @@ public class UserController {
             try {
                 //进行验证，这里可以捕获异常，然后返回对应信息
                 sub.login(token);
-            } catch (Exception ex) {
+            }catch (UnknownSessionException e){
+                return ResultGenerator.genFailResult(e.getMessage());
+            }catch (Exception ex) {
                 return ResultGenerator.genFailResult("登录失败，请检查用户或密码是否输错");
             }
 //            logger.info("User [" + sub.getPrincipal() + "] logged in successfully.");
@@ -160,9 +164,10 @@ public class UserController {
         User user = new User();
         user.setUserName(username);
         user.setSalt(randomNumberGenerator.nextBytes().toHex());
-        String newPassword = new SimpleHash(algorithmName, password,
-                ByteSource.Util.bytes(user.getSalt()), hashIterations).toHex();
+        String newPassword = new SimpleHash(ConstantData.ALGORITHMNAME, password,
+                user.getSalt(), ConstantData.HASHITERATIONS).toString();
         user.setPassword(newPassword);
+        userService.save(user);
         return ResultGenerator.genSuccessResult("注册成功！");
     }
 

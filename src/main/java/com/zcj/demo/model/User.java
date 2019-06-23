@@ -3,6 +3,7 @@ package com.zcj.demo.model;
 import com.zcj.demo.constant.enums.UserStatesEnum;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @Description:
  */
 @Table(name = "user")
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)//
     private Long id;
@@ -27,9 +28,9 @@ public class User {
     @Column(name = "salt")
     private String salt;
     @Column(name = "state")
-    private UserStatesEnum state;
-    @Column(name = "isdelete")
-    private Integer isdelete;
+    private UserStatesEnum state = UserStatesEnum.NORMAL;
+    @Column(name = "isdeleted")
+    private Integer isdelete = 0;
     @Column(name = "create_time")
     private Integer createTime;
     @Column(name = "update_time")
@@ -128,8 +129,8 @@ public class User {
      * 密码盐.
      * @return
      */
-    public String getCredentialsSalt(){
-        return this.userName+this.salt;
-    }
+//    public String getCredentialsSalt(){
+//        return this.userName+this.salt;
+//    }
     //重新对盐重新进行了定义，用户名+salt，这样就更加不容易被破解
 }

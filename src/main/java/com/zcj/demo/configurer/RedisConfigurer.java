@@ -20,8 +20,13 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.JedisSentinelPool;
 
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Redis配置
@@ -60,7 +65,7 @@ public class RedisConfigurer extends CachingConfigurerSupport {
 
 //    @Value("${spring.redis.sentinel.nodes}")
 //    private String redisNodes;
-
+//
 //    @Value("${spring.redis.sentinel.master}")
 //    private String master;
 
@@ -81,7 +86,7 @@ public class RedisConfigurer extends CachingConfigurerSupport {
 //        String[] arrNodes = redisNodes.split(",");
 //        List<String> listNodes = Arrays.asList(arrNodes);
 //        Set sentinels = new HashSet(listNodes);
-//
+
 //        JedisSentinelPool jedisSentinelPool = new JedisSentinelPool(master,sentinels,jedisPoolConfig(),password);
 //        return  jedisSentinelPool;
 //    }
@@ -112,22 +117,6 @@ public class RedisConfigurer extends CachingConfigurerSupport {
     private RedisSerializer<Object> valueSerializer() {
         return new GenericFastJsonRedisSerializer();
     }
-
-//    /**
-//     * spring data 1.x的写法
-//     * @param redisTemplate
-//     * @return
-//     */
-//    @Bean
-//    public CacheManager cacheManager(
-//            @SuppressWarnings("rawtypes") RedisTemplate redisTemplate) {
-//        RedisCacheManager cacheManager= new RedisCacheManager (redisTemplate);
-//        cacheManager.setDefaultExpiration(5*60);
-//        Map<String,Long> expiresMap=new HashMap<>();
-//        expiresMap.put("indexdata",3600L);//首页的缓存，默认一小时
-//        cacheManager.setExpires(expiresMap);
-//        return cacheManager;
-//    }
 
     /**
      * spring data 2.x的写法
