@@ -50,7 +50,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/ajaxLogin", "anon");
         filterChainDefinitionMap.put("/user/login", "anon");
         filterChainDefinitionMap.put("/user/register", "anon");
-        filterChainDefinitionMap.put("/**", "authc");
+        filterChainDefinitionMap.put("/**", "kickout,authc");
         //配置shiro默认登录界面地址，前后端分离中登录界面跳转应由前端路由控制，后台仅返回json数据
         shiroFilterFactoryBean.setLoginUrl("/user/unauth");
         // 登录成功后要跳转的链接
@@ -61,6 +61,7 @@ public class ShiroConfig {
         //未授权界面;
         Map<String,Filter> map= new LinkedHashMap<>();
         map.put("authc",new AjaxPermissionsAuthorizationFilter());
+        map.put("kickout",new KickoutSessionControlFilter());
         shiroFilterFactoryBean.setFilters(map);
 
         return shiroFilterFactoryBean;
@@ -111,12 +112,12 @@ public class ShiroConfig {
     @Bean
     public SessionManager sessionManager() {
         MySessionManager sessionManager = new MySessionManager();
-//        sessionManager.setSessionIdCookieEnabled(true);
-//        SimpleCookie cookie = new SimpleCookie();
-//        cookie.setName("WEBJSESSIONID");
-//        cookie.setHttpOnly(true);
-//        cookie.setMaxAge(60 * 60 * 1000);
-//        sessionManager.setSessionIdCookie(cookie);
+        sessionManager.setSessionIdCookieEnabled(true);
+        SimpleCookie cookie = new SimpleCookie();
+        cookie.setName("JSESSIONID");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(60 * 60 * 1000);
+        sessionManager.setSessionIdCookie(cookie);
         sessionManager.setSessionDAO(redisSessionDAO());
         return sessionManager;
     }
@@ -131,7 +132,7 @@ public class ShiroConfig {
     public RedisManager redisManager() {
         RedisManager redisManager = new RedisManager();
         redisManager.setHost(host);
-        redisManager.setPort(port);
+//        redisManager.setPort(port);
         redisManager.setTimeout(1800);// 配置缓存过期时间
         redisManager.setTimeout(timeout);
         redisManager.setPassword(password);
@@ -157,7 +158,8 @@ public class ShiroConfig {
     public RedisCacheManager cacheManagers() {
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         redisCacheManager.setRedisManager(redisManager());
-        redisCacheManager.setPrincipalIdFieldName("passwordRetryCache");
+//        redisCacheManager.setPrincipalIdFieldName("passwordRetryCache");
+        redisCacheManager.setPrincipalIdFieldName("shiro-kickout-session");
         return redisCacheManager;
     }
 
@@ -194,5 +196,16 @@ public class ShiroConfig {
     @Bean(name = "exceptionHandler")
     public HandlerExceptionResolver handlerExceptionResolver() {
         return new MyExceptionHandler();
+    }
+
+    @Bean(name = "kickoutSessionControlFilter")
+    public KickoutSessionControlFilter kickoutSessionControlFilter(){
+        KickoutSessionControlFilter filter = new KickoutSessionControlFilter();
+        filter.setCacheManager(cacheManagers());
+        filter.setSessionManager(sessionManager());
+        filter.setKickoutUrl("/user/postTest");
+        filter.setMaxSession(1);
+        filter.setKickoutAfter(false);
+        return filter;
     }
 }

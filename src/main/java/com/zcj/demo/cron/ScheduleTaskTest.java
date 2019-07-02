@@ -16,9 +16,9 @@ import java.time.LocalDateTime;
  * @Date: 2019/4/30 14:42
  * @Description: 定时任务测试
  */
-@Component
-@Configuration
-@EnableScheduling
+//@Component
+//@Configuration
+//@EnableScheduling
 public class ScheduleTaskTest {
     /**
      * 1:基于注解编写定时任务
